@@ -2,6 +2,7 @@ let treeImg, tree2Img, sqImg, maImg, LfireImg, BfireImg;
 let treePosX, treePosY, treeScale;
 let smokeParticles = [];
 
+
 function preload() {
   treeImg = loadImage("tree.png");
   tree2Img = loadImage("tree2.png");
@@ -12,12 +13,15 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  imageMode(CENTER);
   fullscreen(true);
+  createCanvas(windowWidth, windowHeight); // 반드시 fullscreen 이후에!
+  imageMode(CENTER);
+
   treePosX = width * 0.5;
   treePosY = height * 0.6;
   treeScale = 0.3;
+
+  startTime = millis(); // 시작 시간 저장
 }
 
 function mousePressed() {
@@ -72,8 +76,18 @@ function draw() {
     }
   }
 
-  
+   // 🎬 3초 후 부드럽게 회색으로 덮기 (fade 효과)
+  if (millis() - startTime > 3000) {
+    let fadeAlpha = map(millis() - startTime, 3000, 4000, 0, 255);
+    fadeAlpha = constrain(fadeAlpha, 0, 150);
+    noStroke();
+    fill(169, 169, 169, fadeAlpha); // #A9A9A9 회색 + 알파값
+    rect(0, 0, width, height);      // 전체 화면 덮기
+  }
 }
+   
+
+
 
 function drawSkyWithGradient() {
   for (let x = 0; x < width; x++) {
